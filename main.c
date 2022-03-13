@@ -6,6 +6,7 @@
 #define HEIGHT 3
 #define WIDTH 3
 
+
 enum Result {
     WIN,
     LOSE,
@@ -17,6 +18,10 @@ enum Player {
     X,
     O,
 };
+
+char const players[] = {'X', 'O'};
+
+enum Player curr_player = X;
 
 char board[HEIGHT][WIDTH] = {
     {' ', ' ', ' '},
@@ -76,50 +81,52 @@ enum Result check_for_win(char board[HEIGHT][WIDTH], char piece) {
 
 }
 
-void handle_turn(enum Player curr_player) {
-    char player;
-    if (curr_player == 0) {
-        player = 'X';
+void handle_turn(enum Player *player) {
+    char player_char;
+    if (*player == X) {
+        player_char = 'X';
     } else {
-        player = 'O';
+        player_char = 'O';
     }
 
     int row, col;
-    printf("Enter your move, %c, using this format: `row col`\n", player);
+    printf("Enter your move, %c, using this format: `row col`\n", player_char);
     print_board(board);
     scanf("%d %d", &row, &col);
-    board[row][col] = player;
+    board[row][col] = player_char;
 
     /* Check for win and exit at win/loss/draw */
-    enum Result result = check_for_win(board, curr_player);
+    enum Result result = check_for_win(board, player_char);
     if (result == WIN) {
-        printf("%c WON!", player);
+        printf("%c WON!\n", player_char);
+        print_board(board);
+        exit(0);
     } else if (result == LOSE) {
-        if (curr_player == O) {
-            printf("O WON!");
+        if (*player == X) {
+            printf("O WON!\n");
+            print_board(board);
             exit(0);
         } else {
-            printf("X WON!");
+            printf("X WON!\n");
+            print_board(board);
             exit(0);
         }
     } else if (result == DRAW) {
-        printf("DRAW");
+        printf("DRAW\n");
+        print_board(board);
         exit(0);
     } else {
-        if (curr_player == X) {
-            curr_player = O;
+        if (*player == X) {
+            *player = O;
         } else {
-            curr_player = X;
+            *player = X;
         }
     }
 
 }
 
 int main() {
-
-    enum Player curr_player = X;
-
     while (true) {
-        handle_turn(curr_player);
+        handle_turn(&curr_player);
     }
 }
