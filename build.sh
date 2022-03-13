@@ -1,6 +1,5 @@
 #!/bin/sh
 
 set -xe
-exec_name="main"
-
-cc -Wall -Wextra -ggdb -o $exec_name main.c -lm
+cc -Wall -Wextra -ggdb -o twoplayer twoplayer.c -lm
+cc -Wall -Wextra -ggdb -o ai ai.c -lm
