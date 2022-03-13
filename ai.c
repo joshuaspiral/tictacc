@@ -70,6 +70,26 @@ enum Result checkForWin(char board[HEIGHT][WIDTH], char piece) {
         return WIN;
     }
 
+    for (int i = 0; i < 3; i++) {
+        if (board[i][0] == board[i][1] && board[i][1] == board[i][2] && board[i][0] == ((piece == 'X') ? 'O' : 'X')) {
+            return LOSE;
+        }
+    }
+
+    for (int i = 0; i < 3; i++) {
+        if (board[0][i] == board[1][i] && board[1][i] == board[2][i] && board[0][i] == ((piece == 'X') ? 'O' : 'X')) {
+            return LOSE;
+        }
+    }
+    
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2] && board[0][0] == ((piece == 'X') ? 'O' : 'X')) {
+        return LOSE;
+    }
+
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0] && board[0][2] == ((piece == 'X') ? 'O' : 'X')) {
+        return LOSE;
+    }
+
     bool draw = true;
     for (int i = 0; i < HEIGHT; i++) {
         for (int j = 0; j < WIDTH; j++) {
@@ -175,17 +195,17 @@ void aiMove(int depth) {
 
 
 void handleTurn(enum Player *player) {
-    char playerChar;
-    if (*player == X) {
-        playerChar = 'X';
-    } else {
-        playerChar = 'O';
-    }
+    char playerChar = HUMAN;
 
     int row, col;
     printf("Enter your move, %c, using this format: `row col`\n", playerChar);
     printBoard(board);
     scanf("%d %d", &row, &col);
+    while (row > HEIGHT || col > WIDTH || board[row][col] != ' ') {
+        printf("Invalid move, reenter your move, %c, using this format: `row col`\n", playerChar);
+        printBoard(board);
+        scanf("%d %d", &row, &col);
+    }
     board[row][col] = playerChar;
 
     /* Check for win and exit at win/loss/draw */
