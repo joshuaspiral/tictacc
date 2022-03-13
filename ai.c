@@ -89,13 +89,10 @@ enum Result checkForWin(char board[HEIGHT][WIDTH], char piece) {
 int minimax(int depth, bool isMaximising) {
     enum Result result = checkForWin(board, AI);
     if (result == WIN) {
-        /* printf("AI WIN\n"); */
         return 1;
     } else if (result == LOSE) {
-        /* printf("AI LOSE\n"); */
         return -1;
     } else if (result == DRAW) {
-        /* printf("DRAW\n"); */
         return 0;
     } 
 
@@ -141,9 +138,7 @@ void aiMove(int depth) {
         for (int j = 0; j < HEIGHT; j++) {
             if (board[i][j] == ' ') {
                 board[i][j] = AI;
-                printBoard(board);
                 int score = minimax(depth, false);
-                printf("Score: %d\n", score);
                 board[i][j] = ' ';
                 if (score > bestScore) {
                     bestScore = score;
@@ -194,21 +189,15 @@ void handleTurn(enum Player *player) {
     board[row][col] = playerChar;
 
     /* Check for win and exit at win/loss/draw */
-    enum Result result = checkForWin(board, playerChar);
+    enum Result result = checkForWin(board, AI);
     if (result == WIN) {
-        printf("%c WON!\n", playerChar);
+        printf("AI WON!\n");
         printBoard(board);
         exit(0);
     } else if (result == LOSE) {
-        if (*player == X) {
-            printf("O WON!\n");
-            printBoard(board);
-            exit(0);
-        } else {
-            printf("X WON!\n");
-            printBoard(board);
-            exit(0);
-        }
+        printf("HUMAN WON!\n");
+        printBoard(board);
+        exit(0);
     } else if (result == DRAW) {
         printf("DRAW\n");
         printBoard(board);
