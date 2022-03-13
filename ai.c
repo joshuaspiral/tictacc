@@ -115,7 +115,6 @@ int minimax(int depth, bool isMaximising, double alpha, double beta) {
     } else if (result == DRAW) {
         return 0;
     } 
-
     if (isMaximising) {
         double bestScore = -INFINITY;
         for (int i = 0; i < HEIGHT; i++) {
@@ -130,7 +129,7 @@ int minimax(int depth, bool isMaximising, double alpha, double beta) {
                     if (alpha > score) {
                         alpha = score;
                     }
-                    if (alpha >= beta) {
+                    if (beta <= alpha) {
                         break;
                     }
                 } 
@@ -162,7 +161,7 @@ int minimax(int depth, bool isMaximising, double alpha, double beta) {
     }
 }
 
-void aiMove(int depth, double alpha, double beta) {
+void aiMove(int depth) {
     Position bestMove;
     double bestScore = -INFINITY;
 
@@ -170,7 +169,7 @@ void aiMove(int depth, double alpha, double beta) {
         for (int j = 0; j < HEIGHT; j++) {
             if (board[i][j] == ' ') {
                 board[i][j] = AI;
-                int score = minimax(depth, false, alpha, beta);
+                int score = minimax(depth, false, INFINITY, -INFINITY);
                 board[i][j] = ' ';
                 if (score > bestScore) {
                     bestScore = score;
@@ -249,7 +248,7 @@ int main() {
         if (currPlayer == X) {
             handleTurn(&currPlayer);
         } else {
-            aiMove(0, -INFINITY, INFINITY);
+            aiMove(0);
         }
     }
 }
