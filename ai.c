@@ -106,7 +106,7 @@ enum Result checkForWin(char board[HEIGHT][WIDTH], char piece) {
 
 }
 
-int minimax(int depth, bool isMaximising) {
+int minimax(int depth, bool isMaximising, double alpha, double beta) {
     enum Result result = checkForWin(board, AI);
     if (result == WIN) {
         return 1;
@@ -122,10 +122,16 @@ int minimax(int depth, bool isMaximising) {
             for (int j = 0; j < HEIGHT; j++) {
                 if (board[i][j] == ' ') {
                     board[i][j] = AI;
-                    int score = minimax(depth + 1, false);
+                    int score = minimax(depth + 1, false, alpha, beta);
                     board[i][j] = ' ';
                     if (score > bestScore) {
                         bestScore = score;
+                    }
+                    if (alpha > score) {
+                        alpha = score;
+                    }
+                    if (alpha >= beta) {
+                        break;
                     }
                 } 
             }
@@ -138,10 +144,16 @@ int minimax(int depth, bool isMaximising) {
             for (int j = 0; j < HEIGHT; j++) {
                 if (board[i][j] == ' ') {
                     board[i][j] = HUMAN;
-                    int score = minimax(depth + 1, true);
+                    int score = minimax(depth + 1, true, alpha, beta);
                     board[i][j] = ' ';
                     if (score < bestScore) {
                         bestScore = score;
+                    }
+                    if (beta < score) {
+                        beta = score;
+                    }
+                    if (beta <= alpha) {
+                        break;
                     }
                 } 
             }
@@ -150,7 +162,7 @@ int minimax(int depth, bool isMaximising) {
     }
 }
 
-void aiMove(int depth) {
+void aiMove(int depth, double alpha, double beta) {
     Position bestMove;
     double bestScore = -INFINITY;
 
@@ -158,7 +170,7 @@ void aiMove(int depth) {
         for (int j = 0; j < HEIGHT; j++) {
             if (board[i][j] == ' ') {
                 board[i][j] = AI;
-                int score = minimax(depth, false);
+                int score = minimax(depth, false, alpha, beta);
                 board[i][j] = ' ';
                 if (score > bestScore) {
                     bestScore = score;
@@ -237,7 +249,7 @@ int main() {
         if (currPlayer == X) {
             handleTurn(&currPlayer);
         } else {
-            aiMove(0);
+            aiMove(0, -INFINITY, INFINITY);
         }
     }
 }
