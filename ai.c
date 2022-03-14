@@ -5,8 +5,9 @@
 #define HEIGHT 3
 #define WIDTH 3
 
-char AI = 'O';
-char HUMAN = 'X';
+unsigned long long count = 0;
+char const AI = 'O';
+char const HUMAN = 'X';
 
 enum Result {
     WIN,
@@ -107,6 +108,8 @@ enum Result checkForWin(char board[HEIGHT][WIDTH], char piece) {
 }
 
 int minimax(int depth, bool isMaximising, double alpha, double beta) {
+    /* count++; */
+    /* printf("%llu\n", count); */
     enum Result result = checkForWin(board, AI);
     if (result == WIN) {
         return 1;
